@@ -49,7 +49,7 @@ if (result) console.log("result is POSITIVE. result = ",result);
     return (
         <>
             <div>
-                <h4 className={styles.testStyle} >........vr19..........no.01..........12:40.........10/07/2024..........</h4>
+                <h4 className={styles.testStyle} >........vr19..........no.02..........16:27.........20/07/2024..........</h4>
                 <p>{legend}</p>
                 <p>{legend1}</p>
                 <a href="https://vitejs.dev" target="_blank">

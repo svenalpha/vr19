@@ -1,7 +1,11 @@
+
+
+
+
 import mongoose from 'mongoose';
 
 import jwt from "jsonwebtoken";
-import Punter from "../models/punter"
+import { Punter } from "../models/punter.js"
 
 export const signup_get = async  (req:any,res:any)=>
  {
@@ -87,5 +91,11 @@ export const login_post = async  (req:any,res:any)=>
 
 export default { signup_get, signup_post, login_get,
                  login_post };
+
+
+
+
+
+
 
 

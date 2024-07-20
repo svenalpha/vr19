@@ -4,7 +4,7 @@
 import mongoose from 'mongoose';
 // import { conn1 } from "../../server.ts";
 
-import  { conn1 } from  "../db/dbm"; 
+import  { conn1 } from  "../db/dbm.js"; 
 
 export var WorkoutModelDb:any;
 

@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 //import Member from "../models/Member";
 import jwt from "jsonwebtoken";
-import Punter from "../models/Punter"
+import Punter from "../models/punter.js"
 
 export const signup_get = async  (req:any,res:any)=>
  {

@@ -5,49 +5,69 @@ import useHelmet from '@hooks/useHelmet';
 //npimport { Helmet } from "react-helmet";
 import React, { useEffect , useState} from 'react';
 import axios from "axios";
+import { useNavigate } from 'react-router-dom';  
+
 //import styles from './Signup.module.scss';  
 import "./Signup.css";
-
-
-
 
 
 const Signup: React.FC<SignupProps> = (props) => 
 {
 console.log("in Signup, props = ",props);   
+const navigate = useNavigate();
 const [password,setPassword] = useState();
 const [email,setEmail] = useState();
-
+const emailError:any = document.querySelector('.email.error');
+const passwordError:any = document.querySelector('.password.error');
 
 const helmet = useHelmet();
 useEffect(() => {
     helmet.setTitle("Signup")
 },[helmet])
 
- 
+
 const handleSubmit = async (e:any) => 
   {e.preventDefault(); 
-   console.log("in handleSubmit, e = ",e); 
+   console.log("in handleSubmit, e = ",e);
+   emailError.textContent = "";
+   passwordError.textContent = ""; 
    //const aaa=e.value.password;
    console.log("in handlesubmit, password = ",password); 
    console.log("in handlesubmit, email = ",email); 
    try{ await axios.post('/rrr/signup',{password,email})
-   .then((response) =>     //  ie success
-   {console.log(" axios response = ",response);
-  //setEmptyFields([]);setError2(null);setTitle(""); setLoad(""); setReps("");   
-   //dispatch({type:"CREATE_WORKOUT",payload: json});
-  // dispatch({type:"CREATE_WORKOUT",payload: response.data});
-   }    );
-      }catch(err){console.log("in signup, err =  ",err);
-                 };
-    //const email = form.email;
-  }
+       .then((response) =>     //  ie success
+        {console.log(" axios response = ",response);
+         console.log("in signup,  successful   response  =  ",response);
+         navigate('/',{replace: true});
+         //setEmptyFields([]);setError2(null);setTitle(""); setLoad(""); setReps("");   
+         //dispatch({type:"CREATE_WORKOUT",payload: json});
+         // dispatch({type:"CREATE_WORKOUT",payload: response.data});
+        }    )     // end .then
+      }catch(err:any) {const errors = err.response.data.errorsx;
+                       console.log("in signup, errors  =  ",errors);   
+                       console.log("in signup, errors.email =",errors.email);
+                       console.log("in signup, errors.password =",errors.password);
+                       console.log("in signup, err:   err.response  =  ",err.response);
+                       emailError.textContent = errors.email;
+                       passwordError.textContent = errors.password;
+                      };  //   end try...catch
+  }   //   end  const handleSubmit = async (e:any) => 
+
+  
+  function goHome(){console.log("inside go home",);
+                    //<NavLink to={"/About"}>Home</NavLink>  
+                    // navigate('/About',{replace: true});
+                     navigate('/',{replace: true});
+                    //<a href="/about"></a>
+                   }
 
 
 
     return (<>
+
+   
   {/*  <style type="text/css">{`._navWrapper_nssbc_1{display: none}`}</style> */}               
-   <h1>Signup</h1>
+  <h1>Signup</h1>
    <h4>inside of an h4</h4>
    <form className="form" onSubmit={handleSubmit}>
      <h2>Sign up</h2>
@@ -67,10 +87,10 @@ const handleSubmit = async (e:any) =>
      <button type="submit">Sign up</button>
    </form>     {/* see TNN_Auth for form css*   see 1-controlled-inputsjs for react forms */}
 
-            
+   {/* <NavLink to={"/About"}>Home</NavLink>    */}  
            <p>empty page </p>   
-        
-       
+           <div><button onClick={() => goHome()}>goHome</button></div>  
+  
        </>)         
 }   //   const Signup: React.FC<SignupProps> = (props) => 
 

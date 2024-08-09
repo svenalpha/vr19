@@ -74,7 +74,7 @@ const getDataFromMongo = async () =>
         <>
             <h4>Contact Page</h4>
             <p>{legend}</p>
-            <p>{legend2}</p>
+            <p> legend2 </p>
             <div>
             {
              workouts && Object.values(workouts).map((dat:any) => (

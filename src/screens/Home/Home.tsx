@@ -27,6 +27,7 @@ const Home: React.FC<HomeProps> = (_props) => {
                                         )               
                     }, [])
   function doEmail(){
+// string for validating email, below     
 //https://dirask.com/posts/TypeScript-validate-email-with-regex-Dn40Ej
 const expression: RegExp = /^(?=.{1,254}$)(?=.{1,64}@)[-!#$%&'*+/0-9=?A-Z^_`a-z{|}~]+(\.[-!#$%&'*+/0-9=?A-Z^_`a-z{|}~]+)*@[A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?(\.[A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?)*$/;
 //const emailx: string = 'john@gmail.com';
@@ -49,7 +50,7 @@ if (result) console.log("result is POSITIVE. result = ",result);
     return (
         <>
             <div>
-                <h4 className={styles.testStyle} >........vr19..........no.02..........16:27.........20/07/2024..........</h4>
+                <h4 className={styles.testStyle} >........vr19..........no.03..........13:15.........09/08/2024..........</h4>
                 <p>{legend}</p>
                 <p>{legend1}</p>
                 <a href="https://vitejs.dev" target="_blank">

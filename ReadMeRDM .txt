@@ -24,8 +24,14 @@ typescript array problem solved with: var array1 :any[]= problem_array; then use
 mongoose hooks, eg save/remove pre/post
 hashing passwords TNN_auth#7 using bcrypt, cookies TNN_Auth #9 for authentication beware  "cross site 
 request forgery"
-jsonwebtoken.. will need to be "secure when not testing" 
+jsonwebtoken.. will need to be "secure when not testing" , testing for web token and its 
+authenticity was problematic. It was divided. Existence of jwt is tested client side in Layout.tsx.
+Authenticity is then tested server side in  jwtVerify app.ts to authController 
 
+
+"document is not defined" error: quick fix: put inside a useEffect eg:
+useEffect(()=>{const emailError:any = document.querySelector('.email.error');}); (because the 
+useEffect callback runs after the component is mounted and painted)
 
 
 vr13 is built out vite-express-ssr-ts-main using react, succesful fetch from backend, fetching entries 
@@ -118,6 +124,52 @@ workoutControllers changed to .ts from .js and changed (req,res) to (req:any,res
 
 
               {
+
+
+
+  var  res2 : any;
+  async function  doCheck(token:any)
+    {try{await axios.post('/rrr/doJwtVerify',{token})  
+          {res2 = "verified"; 
+          }                 
+        }catch(err:any){console.log("token exists but is invalid.err.message = ",err.message); 
+                        res2 = "unverified";  
+                       }  
+     if (res2 != "verified") navigate('/login',{replace: true});
+    }  //   end async function  doCheck(token:any)  
+
+    useLayoutEffect(() =>
+      {const token:any = Cookies.get("jwt");   //Cookies.
+       if (token) {doCheck(token);
+                  } else 
+                  {navigate('/login',{replace: true});
+                  }    
+      },[]         );  //   end  useLayoutEffect(() =>     
+   
+
+
+
+  
+
+/////////////////
+ 
+
+
+          
+         
+         
+                 
+ ////////////////////////        
+
+
+
+
+
+
+
+
+
+
 
 
 

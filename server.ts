@@ -6,6 +6,9 @@ import express from 'express';
 import mongoose from "./server/db/dbm";
 //import 'dotenv/config';
 import api from './server/app.js';
+import   cookieParser from "cookie-parser";
+//import   cookieParser from "cookie-parser";
+
 //import {WorkoutModelDb , workoutSchema} from "./server/models/workoutDbModel";
 //import   users    from "./server/db/users.js";
 
@@ -34,14 +37,26 @@ const createServer = async () => {
 
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
+app.use(cookieParser());
 
 
 
+//app.use(function (req,res,next)
+//  {console.log("in app.use(function  etc req.path =",req.path);
+//   next(); 
+//  } 
+//       );
 
     app.get("/rrr/v9",(req,res) => {
         res.send("using /rrr  : hello world !!!!");
                                     }
             );
+
+ //app.get("/about",(req,res) => {
+ //         res.send("using /about  : hello world !!!!");
+ //                              }
+ //       );
+
    
      app.get("/api/proxy1",(req,res) => {            
         res.send("using proxy1  : successfully fetched using axios : hello world 2!!!!");           
@@ -89,8 +104,23 @@ app.use(express.urlencoded({extended:true}));
     app.use('/rrr', api.router)
 
 
+
+
+    
+ //   app.get('/about', (req, res) => {
+ //           res.send("Welcomeeee I! about  ")
+//
+//            console.log("inside server.ts, /about  req.path = ",req.path);
+//            //next(req);  
+//            //app.get('/about', (req:any, res:any));                             
+//                                     }
+//           )  
+
+
     app.use('*', async (req, res) => {
         try {
+
+         console.log("in app.use('*') req.method, req.path = ",req.method, req.path);
 
             const url = req.originalUrl;
 

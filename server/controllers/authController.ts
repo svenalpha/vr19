@@ -3,9 +3,41 @@
 
 
 import mongoose from 'mongoose';
+import { useNavigate } from 'react-router-dom'; 
 
 import jwt from "jsonwebtoken";
 import { Punter } from "../models/punter.js"
+
+
+export const jwtVerify =  (req:any, res:any)=>
+ {
+  //const navigate = useNavigate();
+  console.log("inside controllers/authControllers    getSecondExport  req.body = ",req.body);
+  const {token} = req.body;
+  console.log("inside controllers/authControllers    getSecondExport  token = ",token);
+    jwt.verify(token,'the_secret_here', (err:any,decodedToken:any) =>  // replace httpOnly in wewb token
+                   {if (err) 
+                     {console.log(" in jwtVerify, token invalid, err.message = ",err.message);
+                      return res.status(401).json("unverified"); 
+                     } else
+                     {console.log("inside authController/jwt.verify");  
+                      return res.status(200).json("verified"); 
+                     } 
+                   }
+
+
+                   //{console.log("inside authController/jwt.verify");  
+                   //  return res.status(200).json("verified"); 
+                   // if (err) {console.log(" in jwtVerify, token invalid, err.message = ",err.message);
+                   //           return res.status(401).json("unverified"); 
+                   //          }
+                   //}     
+
+              )     //  end  jwt.verify(token,'the_se
+  //res.send("-- fetched--  authController via app.ts /rrr/getSecondExport ")
+  }    //  end   export const jwtVerify =  (req:any, res:any)=>
+
+
 
 export const signup_get = async  (req:any,res:any)=>
  {
@@ -31,12 +63,29 @@ export const signup_get = async  (req:any,res:any)=>
 
 
 //   create new entry
-const maxAgeSecs= 60*60*24*3;    // 3 days.  this maxAge uses seconds not milliseconds
+
+
+export const jwt_auth_postx = async  (req:any,res:any)=>
+  {//const navigate = useNavigate();
+   //const {token} = req.body;  
+  // console.log("in authController jwt_auth_postx     token (ie req.body) = ",token.body); 
+   //  jwt.verify(token,'the_secret_here', (err:any,decodedToken:any) =>  // replace httpOnly in wewb token
+   //                 {if (err) {console.log(err.message);
+   //                            navigate('/login',{replace: true});
+   //                           }else {}
+   //                 }
+   //            )
+
+  }      //  end  export const jwt_auth_post = async  (req:any,res:any)=>
+
+//const maxAgeSecs= 60*60*24*3;    // 3 days.  this maxAge uses seconds not milliseconds
+const maxAgeSecs= 60*15;    // 10 minutes.  this maxAge uses seconds not milliseconds
 export const signup_post = async  (req:any,res:any)=>
 {const {email, password} = req.body;  
- let errorsx:any = {email:'',password:''};
+
  console.log("pre mongo create, req.body = ",req.body);  
- try{const punterx = await Punter.create({email,password});  //const punter = await Member.create({email,password});
+ try{
+     const punterx = await Punter.create({email,password});  //const punter = await Member.create({email,password});
      console.log("response from mongo, returning res.status(201) punterx = ",punterx);
 
      let punter_id :any = punterx._id; 
@@ -48,30 +97,30 @@ export const signup_post = async  (req:any,res:any)=>
       return  res.status(201).json({punterx: punterx._id});
      //return res.status(201).json(punterx);
     }catch (error:any){console.log("do error: error.code = ",error.code);
+                       let errorsx:any = {email:'',password:''};
                        if (error.code === 11000)  // this error does not receive an error message, so treated independantly
-                           {errorsx.email ="email aready registered";
+                           {errorsx.email ="email aready registered"; 
+                            errorsx.password =""; 
+                            //let xx :any = errorsx.email;
+                            
                             console.log("already used email message. errorsx.email =",errorsx.email);
                             return res.status(400).json({errorsx});
                            }             
-
                        //console.log("negative response from mongo. return res.status(400).json({error: error.message}; error.message =", error,error.message,error.code);
                        //Object.values(error.errors).forEach((error:any) =>{console.log("error.properties",error.properties.message);});
                        //Object.values(error.errors).forEach(({properties}) =>{console.log("properties = ",properties);});   
                        let array2 :any[] =  Object.values(error.errors);
-                       //console.log("array2 = ",array2);
-
                       
                        //array2.forEach((properties.message)     );
                        //let array3 :any[] = array2;array3.forEach((properties) =>   {console.log("array3.forEach properties = ",properties);}       );
                        //let array3 :any[] = array2;
                        array2.forEach(({properties}) =>
-                           {console.log("array3.forEach properties = ",properties);  
+                           {console.log("array2.forEach properties = ",properties);  
                             errorsx[properties.path]  = properties.message;
-                            console.log("errorsx = ",errorsx);
-                            return res.status(400).json({errorsx});
-                           }       
-                                                                );
-                       
+                            console.log(" last console.log before error. errorsx = ",errorsx);  
+                           }                       
+                                     );                  
+                       return res.status(400).json({errorsx});
                        //array1.forEach(({properties}) =>{console.log("properties = ");}); 
                        //console.log("Object.values(error.errors) = ",Object.values(error.errors).forEach(error =>{console.log(errors.properties);}) );
                         //({error: error.message});
@@ -82,15 +131,109 @@ export const signup_post = async  (req:any,res:any)=>
 console.log("in auth",);
 }    
 
+export const about_get = async  (req:any,res:any,next:any)=>
+  {console.log("in authController, about_get");
+    next();
+  }
+
+
 export const login_get = async  (req:any,res:any)=>
 {
 }
+
+//   log in    
 export const login_post = async  (req:any,res:any)=>
-{
+{const {email, password} = req.body;  
+ console.log("in login_post email,password = ",email,password); 
+try{
+    const punter = await Punter.login(email,password);
+    console.log("in login_post, post try, punter = ",punter); 
+    var punter_id = punter._id;
+    const token = jwt.sign({punter_id},'the_secret_here',{expiresIn: maxAgeSecs});  
+    // res.cookie('jwt',token,{httpOnly: true, maxAge: maxAgeSecs*1000}); // secure: true only sent with 
+     res.cookie('jwt',token,{maxAge: maxAgeSecs*1000}); // secure: true only sent with 
+
+
+    return res.status(200).json({punter: punter._id});
+   }catch(error:any)//{console.log("in login_post, catch err"); 
+                  // return res.status(400).json({});
+                  //}
+//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+{console.log("authController authController 1");
+ let errorsx:any = {email:'',password:''};   
+ let errorsy:any = {email:'',password:''};
+ //console.log("authController in error  = ",error);
+ const xx = error.message; 
+ 
+ console.log("authController xx",xx);
+ console.log("authController error.message = ",error.message);
+ if (error.message === "incorrect email") errorsx.email= "that email is not registered";    
+ if (error.message === "incorrect password") errorsx.password= "that password is not registered"; 
+ console.log("errorsx = ",errorsx);
+ //const xy = Object.values(error);
+ //console.log("authController xy",xy);
+ console.log("authController authController 2");
+ //console.log("do error: error =",error);
+ //console.log("error.Error = ",error.Error);
+ 
+ //if (error === "Error: incorrect email ") errorsx.email= "that 1email is not registered";
+ //if (error === " Error: incorrect email ") errorsx.email= "that 2email is not registered";
+ //if (error === "Error:  incorrect email") errorsx.email= "that 3email is not registered";
+ //if (error === " Error:  incorrect email ") errorsx.email= "that 4email is not registered";
+ //if (error === " incorrect email ") errorsx.email= "that 1email is not registered";
+ //if (error === " incorrect email ") errorsx.email= "that 2email is not registered";
+ //if (error === " incorrect email") errorsx.email= "that 3email is not registered";
+ //if (error === "  incorrect email ") errorsx.email= "that 4email is not registered";
+ 
+ //console.log("in authController, error.response.data = ",error.response.data);
+/*
+ console.log("error.properties = ",error.properties);
+ console.log("Object.values(error) = ",Object.values(error));
+ console.log("Object.values(error.email) = ",Object.values(error));
+ errorsx.password=  error.error ; //"what the fuck is going on";
+ errorsx.email = Object.values(error);
+ ///if (error === " Error: incorrect password") errorsx.password= "that password is not registered";
+ console.log("errorsx = ",errorsx);
+*/
+ ////if (error.code === 11000)  // this error does not receive an error message, so treated independantly
+ ////     {errorsx.email ="email aready registered"; 
+ ////      errorsx.password =""; 
+ ////      //let xx :any = errorsx.email;
+ ////      
+ ////      console.log("already used email message. errorsx.email =",errorsx.email);
+ ////      return res.status(400).json({errorsx});
+ ////     }             
+  //console.log("negative response from mongo. return res.status(400).json({error: error.message}; error.message =", error,error.message,error.code);
+  //Object.values(error.errors).forEach((error:any) =>{console.log("error.properties",error.properties.message);});
+  //Object.values(error.errors).forEach(({properties}) =>{console.log("properties = ",properties);});   
+  
+  ////let array2 :any[] =  Object.values(error.errors);
+ 
+  //array2.forEach((properties.message)     );
+  //let array3 :any[] = array2;array3.forEach((properties) =>   {console.log("array3.forEach properties = ",properties);}       );
+  //let array3 :any[] = array2;
+  ////array2.forEach(({properties}) =>
+  ////    {console.log("array2.forEach properties = ",properties);  
+  ////     errorsx[properties.path]  = properties.message;
+  ////     console.log(" last console.log before error. errorsx = ",errorsx);  
+  ////    }     
+  ////              );                  
+  return res.status(400).json({errorsx});
+  //array1.forEach(({properties}) =>{console.log("properties = ");}); 
+  //console.log("Object.values(error.errors) = ",Object.values(error.errors).forEach(error =>{console.log(errors.properties);}) );
+   //({error: error.message});
+ };
+
+
+//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+
 }
 
+
+
 export default { signup_get, signup_post, login_get,
-                 login_post };
+                 login_post,  jwt_auth_postx, jwtVerify };
 
 
 

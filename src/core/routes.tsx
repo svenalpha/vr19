@@ -10,12 +10,14 @@ import Extra from "@screens/Extra/Extra";
 import Auxiliary from "@screens/Auxiliary/Auxiliary";
 import Landing from "@screens/Landing/Landing";
 import Login from "@screens/Login/Login";
-import Signup from "@screens/Signup/Signup";
+import Signup from "@screens/Signup/Signup";  
+//import requireAuth from "./authRoutes";
+//import protectedRoutes from "./protectedRoutes";
 
 const Contact = loadable(() => import("@screens/Contact/Contact"), { fallback: <div>Loading...</div> });
 
-const routes: RouteObject[] = [
-    {
+const routes: RouteObject[] = [      
+    {  
         path: "/",
         element: <Layout />,
         children: [
@@ -25,25 +27,20 @@ const routes: RouteObject[] = [
                 loader: homeLoader
             }, {
                 path: "about",
-                element: <About />,
+               // <requireAuth exact path ="/about" element ={About} />,
+               element : <About />, 
             },
             {
                 path: "contact",
-                element: <Contact />  
+                element : <Contact /> ,    
             },
             {
                 path: "extra",
                 element: <Extra />  
             },
 
-            {
-                path: "auxiliary",
-                element: <Auxiliary />  
-            },
-            {
-                path: "landing",
-                element: <Landing />  
-            },
+            {path: "auxiliary", element: <Auxiliary /> },
+            {  path: "landing", element: <Landing /> },
             {
                 path: "Login",
                 element: <Login />  

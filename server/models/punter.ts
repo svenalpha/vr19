@@ -51,6 +51,21 @@ punterSchema.pre('save', async function (next){const salt = await bcrypt.genSalt
                                               }
                 );
 
+// static method to login punter                
+punterSchema.statics.login = async function(email,password)
+{console.log("in punterSchema, submitted email,password = ",email,password);
+ const punter = await this.findOne({email: email});    // where this is currenr schema
+ console.log("in punterSchema, punter  = ",punter);
+ if (punter) {const auth = await bcrypt.compare(password,punter.password);
+              console.log("in punterSchema, auth  = ",auth);
+              if (auth) {return punter;
+                        }throw Error('incorrect password')
+             }throw Error('incorrect email');     
+ 
+
+}   //  end   punterSchema.statics.login = async function(email,login)
+
+
 
 /* module.exports = mongoose.model('WorkoutModel', workoutSchema);  */
 

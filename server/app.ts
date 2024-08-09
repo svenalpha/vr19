@@ -4,11 +4,11 @@ import   users    from "./db/Users.js";
 //import {getEnv,getAllWorkoutEntries,
 //    //updateWorkoutEntry,
 //    createWorkoutEntry} from "./controllers/workoutController.js";
-import  { getAllWorkoutEntries, getSecondExport, createWorkoutEntry, deleteWorkoutEntry, 
+import  { getAllWorkoutEntries,  createWorkoutEntry, deleteWorkoutEntry, 
           updateWorkoutEntry }  from "./controllers/workoutController.js";
 
 import  { signup_get , signup_post, login_get , 
-          login_post }  from "./controllers/authController.js";
+          login_post, jwt_auth_postx, jwtVerify }  from "./controllers/authController.js";
 //import   people   from  "@db/people";
 
 
@@ -16,9 +16,13 @@ class App {
           
     public router: Router = express.Router();
 
-   
+    
+  
+    
   
     constructor() {
+        console.log("in app.ts   xxxxxxx =");   
+
 
      //   //const ppp = people;
         this.router.get('/users', (req, res) => { 
@@ -26,12 +30,14 @@ class App {
                             )                   }               
                        ) 
 
+        this.router.post("/jwt_auth_post", jwt_auth_postx);   
+        //this.router.get("/about",  about_get  ); 
         this.router.get("/signup",  signup_get  ); 
         this.router.post("/signup",  signup_post);
         this.router.get("/login",  login_get);
         this.router.post("/login",  login_post);
 
-        this.router.get("/doGetSecondExport",  getSecondExport);  //see export const getAllWorkoutEntries in workoutController.js
+        this.router.post("/doJwtVerify",  jwtVerify);  //see export const getAllWorkoutEntries in workoutController.js
 
 
         // GET all entries   
@@ -70,10 +76,19 @@ class App {
                        )    
 
 
-        this.router.get('/', (req, res) => {
-            res.send("Welcomeeee I!")
-                                           }
-                       )                    
+        //this.router.get('/', (req, res) => {
+        //    res.send("Welcomeeee I!")
+        //    console.log("inside app.ts, this router get /   ");
+        //                                   }
+        //               )                     
+        //this.router.get('/about', (req, res) => {
+        //                res.send("Welcomeeee I! via app.ts about  ")
+        //                console.log("inside app.ts, /about   ");
+        //                                               }
+        //               )                 
+                       
+
+
 
         this.router.get('/tsmessage', (req, res) => {
             res.send("in server/app.ts rrr/tsmessage:  this message has been -- fetched --  ")

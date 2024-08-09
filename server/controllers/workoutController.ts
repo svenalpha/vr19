@@ -28,10 +28,6 @@ export const getEnv =  (req:any,res:any)=>{
     //return res.json({mssg: "GET all entries"}); 
     //return;
 
-    export const getSecondExport =  (req:any, res:any)=>{
-        res.send("-- fetched--  workoutController via app.ts /rrr/getSecondExport in server/app.ts")
-                                                        }  
-
 
   //  update  (ie PATCH) an entry 
 export const updateWorkoutEntry = async  (req:any,res:any)=>{
@@ -152,7 +148,7 @@ export const createWorkoutEntry = async (req:any,res:any)=>
 
 
                                
-export default { getAllWorkoutEntries , getSecondExport, createWorkoutEntry , deleteWorkoutEntry, updateWorkoutEntry}; 
+export default { getAllWorkoutEntries ,  createWorkoutEntry , deleteWorkoutEntry, updateWorkoutEntry}; 
 //export default getEnv;                                           
 //module.exports = getAllWorkoutEntries;                                                      
                                              
